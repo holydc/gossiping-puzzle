@@ -16,7 +16,7 @@ AccumulatorType reduce(const ArrayType &ary, CallbackType &&callback, Accumulato
   for (const auto &value : ary) {
     callback(accumulator, value);
   }
-  return accumulator;
+  return std::move(accumulator);
 }
 
 template<template<class, class, class...> class ObjectType, class KeyType, class ValueType, class... Types>
@@ -76,7 +76,7 @@ int main() {
   std::ofstream ofs("output.txt");
   permute(group.begin(), group.end(), [&tokens, &count, &group, &dictionary, &ofs] () {
     auto group_copy(group);
-    for (auto &pair : count) {
+    for (const auto &pair : count) {
       auto &chars = group_copy[pair.second];
       dictionary[pair.first] = chars.back();
       chars.pop_back();
